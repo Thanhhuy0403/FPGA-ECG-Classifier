@@ -1,0 +1,29 @@
+HƯỚNG DẪN BUILD & CHẠY (Windows)
+
+1) Chuẩn bị file đầu vào
+- signals.txt: mỗi mẫu gồm 320 giá trị float liên tiếp.
+- labels.txt: mỗi mẫu là 1 nhãn số nguyên (0..4), mỗi dòng 1 nhãn.
+- Float_Weight.txt: file weights đã được Py2C sinh ra.
+
+2) Biên dịch (dùng g++)
+Mở terminal tại thư mục dự án và chạy:
+
+  g++ -O2 -std=c++11 -o run_model main.c CNN.cpp Conv.cpp Pool.cpp Dense.cpp
+
+Nếu bạn dùng MinGW, hãy đảm bảo g++ có trong PATH.
+
+3) Chạy chương trình
+
+  run_model.exe
+
+Chương trình sẽ đọc:
+- signals.txt
+- labels.txt
+- Float_Weight.txt
+
+và in ra Accuracy cuối cùng.
+
+4) Lưu ý
+- Nếu dữ liệu có nhiều mẫu, đảm bảo signals.txt chứa đủ 320 * số mẫu giá trị.
+- labels.txt phải có đúng số nhãn tương ứng số mẫu.
+- Nếu muốn đổi đường dẫn file, sửa trong main.c (signals_path, labels_path, weights_path).
