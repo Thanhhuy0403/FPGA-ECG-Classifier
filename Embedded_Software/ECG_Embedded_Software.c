@@ -271,17 +271,20 @@ int main(int argc, char** argv){
         }
 
         // Run FPGA
-        clock_gettime(CLOCK_REALTIME, &start_CNN);
+        // clock_gettime(CLOCK_REALTIME, &start_CNN);
 		for (int k = 0; k < 340; k++) {
 				*(CGRA_info.reg_mmap + LDM_INPUT_BASE_PHYS + address[k]) = Pixel[k];
         }
 		*(CGRA_info.reg_mmap + START_BASE) = 1;
+        clock_gettime(CLOCK_REALTIME, &start_CNN);
         
         // Wait for computation to complete
         while (1){
 			if(*(CGRA_info.reg_mmap + DONE_BASE_PHYS) == 1) 
                 break;
 		}
+        clock_gettime(CLOCK_REALTIME, &end_CNN);
+        time_spent_CNN = BILLION * (end_CNN.tv_sec - start_CNN.tv_sec) + (end_CNN.tv_nsec - start_CNN.tv_nsec) + time_spent_CNN;
 
         // Read CNN output done
         for (int j = 0; j < 1280; j++) {    
@@ -321,8 +324,8 @@ int main(int argc, char** argv){
 #if DRAW_ECG == 1
         int pred = maxindex;
 #endif
-		clock_gettime(CLOCK_REALTIME, &end_CNN);
-		time_spent_CNN = BILLION * (end_CNN.tv_sec - start_CNN.tv_sec) + (end_CNN.tv_nsec - start_CNN.tv_nsec) + time_spent_CNN;
+		// clock_gettime(CLOCK_REALTIME, &end_CNN);
+		// time_spent_CNN = BILLION * (end_CNN.tv_sec - start_CNN.tv_sec) + (end_CNN.tv_nsec - start_CNN.tv_nsec) + time_spent_CNN;
 #if DRAW_ECG == 1
         int gt=(int)Label[i];
         if (gt==pred) correct++;
